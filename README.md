@@ -31,7 +31,7 @@ O **Gerenciador de Estoque de Produtos** é uma aplicação Java desenvolvida pa
    Crie a tabela de produtos (se não existir) ao iniciar a aplicação.
    Utilize a interface gráfica para gerenciar os produtos.
 
-## Imagem da Interface
+## Interface
 
 ![Interface do Gerenciador de Estoque](Interface.png)
 

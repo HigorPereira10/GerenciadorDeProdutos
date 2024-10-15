@@ -26,10 +26,14 @@ O **Gerenciador de Estoque de Produtos** é uma aplicação Java desenvolvida pa
 1. **Clone o repositório:**
 
    ```bash
-   Abra o projeto na sua IDE.
-   Execute a classe AppMain para iniciar a aplicação.
-   Crie a tabela de produtos (se não existir) ao iniciar a aplicação.
-   Utilize a interface gráfica para gerenciar os produtos.
+   git clone https://github.com/HigorPereira10/GerenciadorDeProdutos.git
+   cd GerenciadorDeProdutos
+
+2. **Abra o projeto na sua IDE.**
+3. **Execute a classe AppMain para iniciar a aplicação.**
+4. **Crie a tabela de produtos (se não existir) ao iniciar a aplicação.**
+5. **Utilize a interface gráfica para gerenciar os produtos.**
+   
 
 ## Interface
 

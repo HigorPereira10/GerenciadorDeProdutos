@@ -17,7 +17,7 @@
 *.classpath
 /.settings/
 /target/
-/build/
+/build/ 
 
 # Arquivos de log
 *.log

@@ -39,9 +39,6 @@ O **Gerenciador de Estoque de Produtos** é uma aplicação Java desenvolvida pa
 
 ![Interface do Gerenciador de Estoque](Interface.png)
 
-## Contribuição
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir um **issue** ou enviar um **pull request**.
 
 ## Licença
 

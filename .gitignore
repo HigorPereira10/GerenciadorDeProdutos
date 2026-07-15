@@ -1,30 +1,30 @@
-# Pastas de compilação
-/bin/
-/out/
+# Build (Maven)
+/target/
+dependency-reduced-pom.xml
 
-# Arquivos de configuração da IDE
+# Compilados
 *.class
 *.jar
 *.war
 *.ear
-*.iml
 
-# Diretórios específicos da IDE
+# IDEs
 .idea/
+*.iml
 *.ipr
 *.iws
-*.project
-*.classpath
-/.settings/
-/target/
-/build/ 
+.project
+.classpath
+.settings/
+bin/
 
-# Arquivos de log
-*.log
+# VS Code (mantem launch.json, ignora configs de maquina local)
+.vscode/settings.json
 
-# Arquivos do banco de dados SQLite
+# Banco de dados SQLite gerado em tempo de execucao
 *.db
+*.db-journal
 *.sqlite
 
-# Arquivos de dependências
-/lib/
+# Logs
+*.log

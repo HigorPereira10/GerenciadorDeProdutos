@@ -1,0 +1,263 @@
+/*
+ * Tema claro por padrao. As regras ".root.modo-escuro" logo abaixo redefinem
+ * as mesmas variaveis para o modo escuro - o resto do CSS nunca muda,
+ * so' os valores de cor sao trocados quando o botao "Modo escuro" e clicado.
+ */
+.root {
+    -cor-fundo: #F1F5F9;
+    -cor-card: #FFFFFF;
+    -cor-texto: #1E293B;
+    -cor-texto-suave: #64748B;
+    -cor-borda: #E2E8F0;
+    -cor-primaria: #4F46E5;
+    -cor-primaria-hover: #4338CA;
+    -cor-perigo: #DC2626;
+    -cor-perigo-hover: #B91C1C;
+    -cor-normal: #16A34A;
+    -cor-baixo: #D97706;
+    -cor-esgotado: #DC2626;
+
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: -cor-fundo;
+}
+
+.root.modo-escuro {
+    -cor-fundo: #0F172A;
+    -cor-card: #1E293B;
+    -cor-texto: #F1F5F9;
+    -cor-texto-suave: #94A3B8;
+    -cor-borda: #334155;
+}
+
+/* ---------- Cabecalho ---------- */
+
+.cabecalho {
+    -fx-background-color: -cor-card;
+    -fx-padding: 20 28 20 28;
+    -fx-spacing: 16;
+    -fx-border-color: transparent transparent -cor-borda transparent;
+    -fx-border-width: 1;
+}
+
+.titulo-app {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cor-texto;
+}
+
+.subtitulo-app {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: -cor-texto-suave;
+}
+
+.cartoes {
+    -fx-padding: 8 0 0 0;
+}
+
+.cartao {
+    -fx-background-color: -cor-fundo;
+    -fx-background-radius: 12;
+    -fx-padding: 14 20 14 20;
+    -fx-spacing: 4;
+    -fx-min-width: 190;
+}
+
+.cartao-rotulo {
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cor-texto-suave;
+}
+
+.cartao-valor {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cor-texto;
+}
+
+.cartao-valor-alerta {
+    -fx-text-fill: -cor-baixo;
+}
+
+.cartao-valor-destaque {
+    -fx-text-fill: -cor-primaria;
+}
+
+/* ---------- Conteudo central ---------- */
+
+.conteudo {
+    -fx-padding: 24 28 24 28;
+}
+
+.painel-formulario {
+    -fx-background-color: -cor-card;
+    -fx-background-radius: 14;
+    -fx-padding: 22;
+}
+
+.painel-titulo {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cor-texto;
+    -fx-padding: 0 0 6 0;
+}
+
+.campo-rotulo {
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cor-texto-suave;
+}
+
+.text-field {
+    -fx-background-color: -cor-fundo;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: -cor-borda;
+    -fx-padding: 8 10 8 10;
+    -fx-text-fill: -cor-texto;
+    -fx-prompt-text-fill: -cor-texto-suave;
+}
+
+.text-field:focused {
+    -fx-border-color: -cor-primaria;
+}
+
+.mensagem-erro {
+    -fx-text-fill: -cor-perigo;
+    -fx-font-size: 11.5px;
+}
+
+.botoes-formulario {
+    -fx-padding: 8 0 0 0;
+}
+
+.button {
+    -fx-background-radius: 8;
+    -fx-padding: 10 16 10 16;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.botao-primario {
+    -fx-background-color: -cor-primaria;
+    -fx-text-fill: white;
+}
+
+.botao-primario:hover {
+    -fx-background-color: -cor-primaria-hover;
+}
+
+.botao-secundario {
+    -fx-background-color: transparent;
+    -fx-text-fill: -cor-texto;
+    -fx-border-color: -cor-borda;
+    -fx-border-radius: 8;
+}
+
+.botao-secundario:hover {
+    -fx-background-color: -cor-fundo;
+}
+
+.botao-perigo {
+    -fx-background-color: transparent;
+    -fx-text-fill: -cor-perigo;
+    -fx-border-color: -cor-perigo;
+    -fx-border-radius: 8;
+}
+
+.botao-perigo:hover {
+    -fx-background-color: -cor-perigo;
+    -fx-text-fill: white;
+}
+
+.botao-texto {
+    -fx-background-color: transparent;
+    -fx-text-fill: -cor-texto-suave;
+}
+
+.botao-texto:hover {
+    -fx-text-fill: -cor-texto;
+    -fx-underline: true;
+}
+
+/* ---------- Tabela ---------- */
+
+.painel-tabela {
+    -fx-background-color: -cor-card;
+    -fx-background-radius: 14;
+    -fx-padding: 22;
+}
+
+.campo-busca {
+    -fx-font-size: 13px;
+}
+
+.tabela-produtos {
+    -fx-background-color: transparent;
+    -fx-border-color: -cor-borda;
+    -fx-border-radius: 8;
+}
+
+.tabela-produtos .column-header-background {
+    -fx-background-color: -cor-fundo;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.tabela-produtos .column-header .label {
+    -fx-text-fill: -cor-texto-suave;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.tabela-produtos .table-row-cell {
+    -fx-background-color: -cor-card;
+    -fx-table-cell-border-color: -cor-borda;
+    -fx-text-fill: -cor-texto;
+}
+
+.tabela-produtos .table-row-cell:odd {
+    -fx-background-color: derive(-cor-fundo, 40%);
+}
+
+.tabela-produtos .table-row-cell:selected {
+    -fx-background-color: derive(-cor-primaria, 80%);
+}
+
+.tabela-produtos .table-cell {
+    -fx-text-fill: -cor-texto;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.tag-status {
+    -fx-padding: 3 10 3 10;
+    -fx-background-radius: 20;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.tag-normal {
+    -fx-background-color: -cor-normal;
+}
+
+.tag-baixo {
+    -fx-background-color: -cor-baixo;
+}
+
+.tag-esgotado {
+    -fx-background-color: -cor-esgotado;
+}
+
+/* ---------- Rodape ---------- */
+
+.rodape {
+    -fx-background-color: -cor-card;
+    -fx-padding: 10 28 10 28;
+    -fx-border-color: -cor-borda transparent transparent transparent;
+    -fx-border-width: 1;
+}
+
+.rodape .label {
+    -fx-text-fill: -cor-texto-suave;
+    -fx-font-size: 11.5px;
+}

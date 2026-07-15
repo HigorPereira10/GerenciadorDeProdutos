@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "com.gerenciadorprodutos.App",
+            "projectName": "gerenciador-de-produtos"
+        },
+        {
+            "type": "java",
+            "name": "Gerenciador de Produtos",
+            "request": "launch",
+            "mainClass": "com.gerenciadorprodutos.Launcher",
+            "projectName": "gerenciador-de-produtos"
+        }
+    ]
+}

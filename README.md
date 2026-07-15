@@ -1,45 +1,75 @@
-# Gerenciador de Estoque de Produtos 
+# Gerenciador de Produtos
 
-## Descrição
+Aplicacao desktop para controle de estoque, construida em **Java 21 + JavaFX**, com persistencia em **SQLite** e arquitetura em camadas (model / repository / service / ui). Originalmente um projeto Swing simples feito no Eclipse, reescrito do zero para praticar boas praticas de organizacao de codigo Java.
 
-O **Gerenciador de Estoque de Produtos** é uma aplicação Java desenvolvida para facilitar o gerenciamento de produtos em estoque. Com uma interface gráfica simples e intuitiva, a aplicação permite adicionar, atualizar, excluir e buscar produtos, além de listar todos os itens disponíveis. Utiliza o banco de dados **SQLite** para armazenamento dos dados.
+![Tela principal do Gerenciador de Produtos](docs/interface.png)
 
-## Funcionalidades
+## Destaques
 
-- **Adicionar Produtos**: Insira nome, quantidade, preço e status do produto no estoque.
-- **Atualizar Produtos**: Modifique as informações dos produtos existentes.
-- **Excluir Produtos**: Remova produtos do banco de dados.
-- **Buscar Produtos**: Pesquise produtos pelo nome.
-  
-## Tecnologias Utilizadas
+- **Status de estoque calculado automaticamente.** Nada de escolher manualmente "Estoque Baixo" em um combo box: o status (`Normal`, `Baixo`, `Esgotado`) e derivado da quantidade em tempo real, então nunca fica inconsistente com o numero real de itens.
+- **Dashboard com indicadores.** Total de produtos cadastrados, quantos estão com estoque baixo/esgotado e o valor total parado em estoque, sempre recalculados a cada alteração.
+- **Busca instantânea.** A tabela é filtrada a cada letra digitada, sem round-trip ao banco a cada tecla (usa `FilteredList` + `SortedList` do JavaFX).
+- **Modo escuro.** Alternável por um botão no cabeçalho, trocando apenas variáveis de cor no CSS.
+- **Arquitetura em camadas**, com uma interface (`ProdutoRepository`) separando a regra de negócio do SQL, o que também permite testar o `ProdutoService` com um repositório falso em memória, sem precisar de banco de dados.
+- **Testes automatizados** com JUnit 5: regras de validação e cálculo de status testadas isoladamente, e o repositório SQLite testado de ponta a ponta contra um banco real (em arquivo temporário).
 
-- **Java (Swing)** para a interface gráfica.
-- **SQLite** para o armazenamento dos dados.
+## Tecnologias
 
-## Pré-requisitos
+| Camada          | Tecnologia                          |
+|-----------------|--------------------------------------|
+| Interface       | JavaFX 21 (FXML + CSS)               |
+| Persistência    | SQLite (via `sqlite-jdbc`)           |
+| Build           | Maven                                |
+| Testes          | JUnit 5                              |
+| Linguagem       | Java 21                              |
 
-- **Java JDK 8+** instalado.
-- Uma IDE de sua escolha para executar o projeto.
+## Estrutura do projeto
 
-## Como Usar
+```
+src/main/java/com/gerenciadorprodutos/
+├── App.java                  # ponto de entrada (JavaFX Application)
+├── model/                    # Produto, StatusEstoque
+├── exception/                # exceções de validação/persistência
+├── database/                 # conexão e criação do schema SQLite
+├── repository/                # acesso a dados (interface + implementação SQLite)
+├── service/                  # regras de negócio e validações
+└── ui/                       # controller da tela (MainController)
 
-1. **Clone o repositório:**
+src/main/resources/
+├── schema.sql                 # script de criação da tabela
+└── com/gerenciadorprodutos/ui/
+    ├── main-view.fxml         # layout da tela
+    └── styles.css             # tema claro/escuro
 
-   ```bash
-   git clone https://github.com/HigorPereira10/GerenciadorDeProdutos.git
-   cd GerenciadorDeProdutos
+src/test/java/com/gerenciadorprodutos/
+├── service/                   # testes de regra de negócio (repositório falso em memória)
+└── repository/                # testes de integração contra SQLite real
+```
 
-2. **Abra o projeto na sua IDE.**
-3. **Execute a classe AppMain para iniciar a aplicação.**
-4. **Crie a tabela de produtos (se não existir) ao iniciar a aplicação.**
-5. **Utilize a interface gráfica para gerenciar os produtos.**
-   
+## Como rodar
 
-## Interface
+Pré-requisitos: **JDK 21+** e **Maven** (ou use a extensão Maven do VS Code, que baixa um Maven embutido automaticamente).
 
-![Interface do Gerenciador de Estoque](Interface.png)
+```bash
+mvn javafx:run
+```
 
+Ao abrir pela primeira vez, um arquivo `estoque.db` é criado automaticamente na raiz do projeto com a tabela de produtos - não é preciso configurar nada manualmente.
 
-## Licença
+### Rodando os testes
 
-Este projeto é licenciado sob a [Apache License 2.0](LICENSE).
+```bash
+mvn test
+```
+
+## Regras de negócio
+
+- Nome não pode ficar em branco; quantidade e preço não podem ser negativos.
+- O status de cada produto é recalculado a partir da quantidade: `0` unidades = **Esgotado**, menos de `10` = **Estoque Baixo**, caso contrário = **Estoque Normal**.
+- O id de cada produto é gerado pelo próprio SQLite (`AUTOINCREMENT`) no momento da inserção.
+
+## Possíveis evoluções
+
+- Exportar a listagem de produtos para CSV/PDF.
+- Histórico de movimentações de estoque (entradas/saídas), em vez de só o saldo atual.
+- Empacotar a aplicação como executável nativo com `jpackage`.

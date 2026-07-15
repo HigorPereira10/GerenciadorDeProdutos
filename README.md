@@ -1,4 +1,4 @@
-# Gerenciador de Produtos
+# Gerenciador de Estoque
 
 Aplicacao desktop para controle de estoque, construida em **Java 21 + JavaFX**, com persistencia em **SQLite** e arquitetura em camadas (model / repository / service / ui). Originalmente um projeto Swing simples feito no Eclipse, reescrito do zero para praticar boas praticas de organizacao de codigo Java.
 

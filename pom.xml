@@ -20,16 +20,6 @@
     </properties>
 
     <dependencies>
-        <!--
-          Cada modulo do JavaFX declara, no proprio pom.xml dele, uma dependencia
-          SEM classifier para o modulo de baixo (fxml -> controls -> graphics -> base).
-          Isso faz o Maven puxar tanto o jar "stub" (sem classifier, praticamente vazio)
-          quanto o jar real da plataforma ao mesmo tempo - e ferramentas que montam o
-          classpath na mao (como o Run/Debug do VS Code) colocam os dois juntos, o que
-          quebra o JavaFX em runtime com um erro enganoso de "main deve retornar void".
-          Por isso declaramos os 4 modulos explicitamente com o classifier certo (definido
-          nos profiles de SO logo abaixo) e excluimos a cadeia transitiva sem classifier.
-        -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>

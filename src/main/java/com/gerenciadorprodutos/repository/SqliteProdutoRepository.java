@@ -13,29 +13,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementação de ProdutoRepository que grava e lê os produtos em um banco SQLite, 
+ * usando JDBC (a API padrão do Java para falar com bancos de dados).
+ *
+ * Cada método aqui segue sempre o mesmo formato: monta o comando SQL, abre uma
+ * conexão, executa o comando e trata o resultado, qualquer erro de banco
+ * (SQLException) é convertido em PersistenciaException, para que o resto da
+ * aplicação não precise conhecer detalhes de SQL/JDBC.
+ */
 public class SqliteProdutoRepository implements ProdutoRepository {
 
     private final String urlConexao;
 
-    /** Usada pela aplicacao: grava no arquivo estoque.db padrao. */
+    /** Usada pela aplicação: grava no arquivo estoque.db padrão. */
     public SqliteProdutoRepository() {
         this(DatabaseManager.URL_PADRAO);
     }
 
-    /** Usada pelos testes: aponta para um banco temporario, isolado do estoque.db real. */
+    /** Usada pelos testes: aponta para um banco temporário, isolado do estoque.db real. */
     public SqliteProdutoRepository(String urlConexao) {
         this.urlConexao = urlConexao;
         DatabaseManager.criarTabelas(urlConexao);
     }
 
+    /** Abre uma conexão nova com o banco configurado (padrão ou de teste). */
     private Connection conectar() throws SQLException {
         return DatabaseManager.obterConexao(urlConexao);
     }
 
     @Override
     public Produto salvar(Produto produto) {
+        // "?" são espaços reservados (placeholders) preenchidos depois pelo
+        // PreparedStatement. isso evita SQL Injection e problemas de formatação.
         String sql = "INSERT INTO produtos (nome, quantidade, preco, categoria) VALUES (?, ?, ?, ?)";
 
+        // O try-with-resources fecha a conexão e o comando automaticamente ao final, mesmo se der erro no meio do caminho.
         try (Connection conexao = conectar();
              PreparedStatement comando = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -43,7 +56,7 @@ public class SqliteProdutoRepository implements ProdutoRepository {
             comando.executeUpdate();
 
             // Deixa o SQLite (AUTOINCREMENT) gerar o id, em vez de calcular manualmente
-            // o "proximo id livre" como na versao antiga - mais simples e sem condicoes de corrida.
+            // o "proximo id livre" como na versao antiga, mais simples e sem condicoes de corrida.
             try (ResultSet chaves = comando.getGeneratedKeys()) {
                 if (chaves.next()) {
                     produto.setId(chaves.getInt(1));
@@ -64,6 +77,8 @@ public class SqliteProdutoRepository implements ProdutoRepository {
              PreparedStatement comando = conexao.prepareStatement(sql)) {
 
             preencherParametros(comando, produto);
+            // Os 4 primeiros parâmetros (nome, quantidade, preco, categoria) já foram preenchidos acima;
+            // aqui só falta o 5º, usado na cláusula WHERE id = ?.
             comando.setInt(5, produto.getId());
             comando.executeUpdate();
 
@@ -96,6 +111,8 @@ public class SqliteProdutoRepository implements ProdutoRepository {
 
             comando.setInt(1, id);
             try (ResultSet resultado = comando.executeQuery()) {
+                // resultado.next() move o "cursor" para a primeira linha; se não houvernenhuma linha,
+                // o produto não existe e devolvemos um Optional vazio.
                 return resultado.next() ? Optional.of(mapear(resultado)) : Optional.empty();
             }
 
@@ -111,6 +128,7 @@ public class SqliteProdutoRepository implements ProdutoRepository {
         try (Connection conexao = conectar();
              PreparedStatement comando = conexao.prepareStatement(sql)) {
 
+            // Os "%" antes e depois do texto fazem o LIKE buscar o trecho em qualquer posição do nome.
             comando.setString(1, "%" + nome + "%");
             try (ResultSet resultado = comando.executeQuery()) {
                 return mapearTodos(resultado);
@@ -136,6 +154,7 @@ public class SqliteProdutoRepository implements ProdutoRepository {
         }
     }
 
+    /** Preenche os 4 primeiros parâmetros (?) de um INSERT/UPDATE com os dados do produto. */
     private void preencherParametros(PreparedStatement comando, Produto produto) throws SQLException {
         comando.setString(1, produto.getNome());
         comando.setInt(2, produto.getQuantidade());
@@ -143,6 +162,7 @@ public class SqliteProdutoRepository implements ProdutoRepository {
         comando.setString(4, produto.getCategoria());
     }
 
+    /** Percorre todas as linhas de um ResultSet e converte cada uma em um objeto Produto. */
     private List<Produto> mapearTodos(ResultSet resultado) throws SQLException {
         List<Produto> produtos = new ArrayList<>();
         while (resultado.next()) {
@@ -151,6 +171,7 @@ public class SqliteProdutoRepository implements ProdutoRepository {
         return produtos;
     }
 
+    /** Converte a linha atual do ResultSet (uma linha da tabela "produtos") em um objeto Produto. */
     private Produto mapear(ResultSet resultado) throws SQLException {
         Produto produto = new Produto();
         produto.setId(resultado.getInt("id"));

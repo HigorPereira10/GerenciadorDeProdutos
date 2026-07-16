@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+    Layout da tela única da aplicação, definido visualmente em FXML (algo como
+    um "HTML" da interface JavaFX). O atributo fx:controller (mais abaixo) liga
+    este arquivo à classe MainController, que é quem reage aos cliques e
+    preenche os dados dinâmicos (fx:id marca os componentes que o Java acessa).
+-->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -14,6 +21,7 @@
 <BorderPane fx:id="raiz" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.gerenciadorprodutos.ui.MainController">
+    <!-- Cabeçalho: título da aplicação, botão de alternar tema e os 3 cartões do dashboard. -->
     <top>
         <VBox styleClass="cabecalho">
             <HBox styleClass="barra-titulo" alignment="CENTER_LEFT" spacing="12">
@@ -21,9 +29,11 @@
                     <Label text="Gerenciador de Produtos" styleClass="titulo-app"/>
                     <Label text="Controle de estoque em tempo real" styleClass="subtitulo-app"/>
                 </VBox>
+                <!-- Region "elástica" que empurra o botão de tema para a direita. -->
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="btnTema" text="Modo escuro" styleClass="botao-secundario" onAction="#alternarTema"/>
             </HBox>
+            <!-- Cartões com os indicadores do dashboard, atualizados por MainController.carregarProdutos(). -->
             <HBox styleClass="cartoes" spacing="16">
                 <VBox styleClass="cartao">
                     <Label text="PRODUTOS CADASTRADOS" styleClass="cartao-rotulo"/>
@@ -40,8 +50,10 @@
             </HBox>
         </VBox>
     </top>
+    <!-- Conteúdo central: formulário de cadastro/edição à esquerda e tabela de produtos à direita. -->
     <center>
         <HBox styleClass="conteudo" spacing="20">
+            <!-- Formulário: cada campo de texto tem fx:id para o MainController ler/preencher o valor. -->
             <VBox styleClass="painel-formulario" spacing="14" prefWidth="290">
                 <Label text="Dados do produto" styleClass="painel-titulo"/>
                 <VBox spacing="4">
@@ -62,7 +74,9 @@
                         <TextField fx:id="campoPreco" promptText="0,00"/>
                     </VBox>
                 </HBox>
+                <!-- Escondido por padrão (visible/managed="false"); MainController mostra/esconde ao validar. -->
                 <Label fx:id="lblErro" styleClass="mensagem-erro" wrapText="true" managed="false" visible="false"/>
+                <!-- Cada botão chama, via onAction, o método correspondente no MainController. -->
                 <VBox spacing="8" styleClass="botoes-formulario">
                     <Button fx:id="btnAdicionar" text="Adicionar produto" styleClass="botao-primario" maxWidth="Infinity" onAction="#adicionarProduto"/>
                     <Button fx:id="btnAtualizar" text="Atualizar selecionado" styleClass="botao-secundario" maxWidth="Infinity" onAction="#atualizarProduto"/>
@@ -70,6 +84,7 @@
                     <Button fx:id="btnLimpar" text="Limpar campos" styleClass="botao-texto" maxWidth="Infinity" onAction="#limparCampos"/>
                 </VBox>
             </VBox>
+            <!-- Busca + tabela: as colunas aqui só definem título/largura, os dados são ligados em Java (MainController.configurarColunas()). -->
             <VBox styleClass="painel-tabela" spacing="10" HBox.hgrow="ALWAYS">
                 <TextField fx:id="campoBusca" promptText="Buscar por nome..." styleClass="campo-busca"/>
                 <TableView fx:id="tabela" styleClass="tabela-produtos" VBox.vgrow="ALWAYS">
@@ -86,6 +101,7 @@
             </VBox>
         </HBox>
     </center>
+    <!-- Rodapé: barra de status com mensagens de sucesso (ex.: "Produto adicionado com sucesso"). -->
     <bottom>
         <HBox styleClass="rodape" alignment="CENTER_LEFT">
             <Label fx:id="lblStatusBar" text="Pronto."/>

@@ -8,12 +8,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Dublê de teste do repositório - guarda tudo em uma lista, sem tocar em banco
- * nenhum. Usado para testar as regras do ProdutoService isoladamente e rápido.
+ * Dublê de teste (implementação falsa) do repositório - guarda tudo em uma
+ * lista em memória, sem tocar em banco de dados nenhum. Usado para testar as
+ * regras do ProdutoService de forma isolada e rápida, já que não depende de
+ * SQLite nem de arquivos em disco.
+ *
+ * Isso só é possível porque o ProdutoService depende da interface
+ * ProdutoRepository, e não diretamente da implementação SQLite.
  */
 class RepositorioEmMemoria implements ProdutoRepository {
 
     private final List<Produto> produtos = new ArrayList<>();
+    // Simula o AUTOINCREMENT do banco de verdade: cada produto salvo recebe o próximo id disponível.
     private int proximoId = 1;
 
     @Override
@@ -25,6 +31,8 @@ class RepositorioEmMemoria implements ProdutoRepository {
 
     @Override
     public void atualizar(Produto produto) {
+        // Encontra o produto existente pelo id e copia os novos valores para ele,
+        // simulando um "UPDATE" de banco de dados.
         buscarPorId(produto.getId()).ifPresent(existente -> {
             existente.setNome(produto.getNome());
             existente.setQuantidade(produto.getQuantidade());
@@ -52,6 +60,8 @@ class RepositorioEmMemoria implements ProdutoRepository {
 
     @Override
     public List<Produto> listarTodos() {
+        // Devolve uma cópia da lista, para que quem recebe não possa alterar
+        // a lista interna deste repositório por acidente.
         return new ArrayList<>(produtos);
     }
 }

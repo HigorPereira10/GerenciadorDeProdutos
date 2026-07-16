@@ -1,10 +1,15 @@
 package com.gerenciadorprodutos.model;
 
 /**
- * Antes o status era escolhido manualmente em um combo box, o que permitia
- * inconsistencias (ex.: marcar "Estoque Baixo" com 500 unidades). Aqui o status
- * deixa de ser uma escolha do usuario e passa a ser calculado a partir da
- * quantidade real em estoque, sempre atualizado e sempre coerente.
+ * Representa a situação do estoque de um produto: Esgotado, Baixo ou Normal.
+ *
+ * Antes o status era escolhido manualmente em uma caixa de seleção (combo box), o que permitia inconsistências 
+ * (por exemplo, marcar "Estoque Baixo" em um produto com 500 unidades). 
+ * Aqui o status deixa de ser uma escolha do usuário e passa a ser calculado a partir da quantidade real em estoque,
+ * sempre atualizado e sempre coerente com o número de itens.
+ *
+ * Cada valor do enum carrega, além do nome interno (ESGOTADO, BAIXO, NORMAL),
+ * um rótulo para exibir na tela e o nome de uma classe CSS para colorir a "tag" de status na tabela.
  */
 public enum StatusEstoque {
 
@@ -12,6 +17,7 @@ public enum StatusEstoque {
     BAIXO("Estoque Baixo", "tag-baixo"),
     NORMAL("Estoque Normal", "tag-normal");
 
+    /** Abaixo de 10 unidades (e acima de zero) o estoque já é considerado baixo. */
     private static final int LIMITE_ESTOQUE_BAIXO = 10;
 
     private final String rotulo;
@@ -22,6 +28,12 @@ public enum StatusEstoque {
         this.estiloCss = estiloCss;
     }
 
+    /**
+     * Calcula qual status corresponde a uma quantidade de itens em estoque:
+     * 0 unidades = Esgotado; 
+     * menos de 10 = Baixo;
+     * qualquer outro valor = Normal.
+     */
     public static StatusEstoque calcular(int quantidade) {
         if (quantidade <= 0) {
             return ESGOTADO;
@@ -32,6 +44,7 @@ public enum StatusEstoque {
         return NORMAL;
     }
 
+    /** Texto exibido para o usuário na tabela (ex.: "Estoque Baixo"). */
     public String getRotulo() {
         return rotulo;
     }

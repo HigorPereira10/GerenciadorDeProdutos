@@ -9,33 +9,48 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Cuida da conexao com o SQLite e da criacao da tabela. Recebe a URL de
- * conexao de fora (em vez de ter um caminho fixo "gravado na pedra") para
- * que os testes possam apontar para um banco temporario, sem tocar no
- * estoque.db real usado pela aplicacao.
+ * Classe utilitária responsável por tudo que envolve a conexão com o SQLite:
+ * abrir conexões e garantir que a tabela de produtos exista.
+ *
+ * A URL de conexão é recebida de fora (por parâmetro), em vez de ter um caminho fixo dentro da classe. 
+ * Isso permite que os testes automatizados apontem para um banco de dados temporário, sem nunca tocar no arquivo estoque.db real.
  */
 public final class DatabaseManager {
 
-    /** Arquivo usado pela aplicacao em producao, criado ao lado do jar. */
+    /** Caminho do arquivo de banco usado pela aplicação em produção, criado ao lado do jar. */
     public static final String URL_PADRAO = "jdbc:sqlite:estoque.db";
 
+    // Construtor privado: como todos os métodos são estáticos, essa classe nunca precisa ser instanciada.
     private DatabaseManager() {
     }
 
-    /** Cria a tabela de produtos caso ainda nao exista nessa base. */
+    /**
+     * Garante que a tabela de produtos exista no banco indicado por urlConexao.
+     * Se a tabela já existir, o comando SQL (que usa "IF NOT EXISTS") não faz nada, 
+     * por isso é seguro chamar este método toda vez que a aplicação inicia.
+     */
     public static void criarTabelas(String urlConexao) {
+        // O "try-with-resources" abaixo garante que a conexão e o Statement sejam
+        // fechados automaticamente ao final do bloco, mesmo se ocorrer um erro.
         try (Connection conexao = obterConexao(urlConexao);
              Statement comando = conexao.createStatement()) {
             comando.execute(lerScriptDeCriacao());
         } catch (SQLException e) {
+            // Qualquer falha aqui impede a aplicação de funcionar, então é lançada
+            // como uma exceção não verificada (RuntimeException) para interromper a inicialização.
             throw new IllegalStateException("Nao foi possivel preparar o banco de dados", e);
         }
     }
 
+    /** Abre uma nova conexão JDBC com o banco SQLite indicado pela URL. */
     public static Connection obterConexao(String urlConexao) throws SQLException {
         return DriverManager.getConnection(urlConexao);
     }
 
+    /**
+     * Lê o conteúdo do arquivo schema.sql (que fica dentro dos recursos do projeto,
+     * em src/main/resources) e devolve como texto, para ser executado como comando SQL.
+     */
     private static String lerScriptDeCriacao() {
         try (InputStream entrada = DatabaseManager.class.getResourceAsStream("/schema.sql")) {
             if (entrada == null) {

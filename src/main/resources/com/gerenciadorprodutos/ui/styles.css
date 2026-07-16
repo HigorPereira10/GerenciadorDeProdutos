@@ -1,7 +1,10 @@
 /*
- * Tema claro por padrao. As regras ".root.modo-escuro" logo abaixo redefinem
- * as mesmas variaveis para o modo escuro - o resto do CSS nunca muda,
- * so' os valores de cor sao trocados quando o botao "Modo escuro" e clicado.
+ * Tema claro por padrão. Cada "-cor-x" é uma variável CSS (JavaFX chama de
+ * "looked-up color"): o resto das regras deste arquivo usa essas variáveis
+ * em vez de cores fixas, então basta redefini-las para trocar o tema inteiro.
+ * As regras ".root.modo-escuro" logo abaixo redefinem essas mesmas variáveis
+ * para o modo escuro - o resto do CSS nunca muda, só os valores de cor são
+ * trocados quando o botão "Modo escuro" é clicado (MainController.alternarTema()).
  */
 .root {
     -cor-fundo: #F1F5F9;
@@ -21,6 +24,7 @@
     -fx-background-color: -cor-fundo;
 }
 
+/* Modo escuro: só troca as cores de fundo/texto/borda, mantendo o resto do layout igual. */
 .root.modo-escuro {
     -cor-fundo: #0F172A;
     -cor-card: #1E293B;
@@ -29,7 +33,7 @@
     -cor-borda: #334155;
 }
 
-/* ---------- Cabecalho ---------- */
+/* ---------- Cabeçalho: título da aplicação, botão de tema e cartões do dashboard ---------- */
 
 .cabecalho {
     -fx-background-color: -cor-card;
@@ -82,7 +86,7 @@
     -fx-text-fill: -cor-primaria;
 }
 
-/* ---------- Conteudo central ---------- */
+/* ---------- Conteúdo central: formulário de cadastro/edição à esquerda ---------- */
 
 .conteudo {
     -fx-padding: 24 28 24 28;
@@ -180,7 +184,7 @@
     -fx-underline: true;
 }
 
-/* ---------- Tabela ---------- */
+/* ---------- Tabela de produtos (à direita) e as "tags" coloridas de status ---------- */
 
 .painel-tabela {
     -fx-background-color: -cor-card;
@@ -248,7 +252,7 @@
     -fx-background-color: -cor-esgotado;
 }
 
-/* ---------- Rodape ---------- */
+/* ---------- Rodapé: barra de status (mensagens de sucesso) ---------- */
 
 .rodape {
     -fx-background-color: -cor-card;

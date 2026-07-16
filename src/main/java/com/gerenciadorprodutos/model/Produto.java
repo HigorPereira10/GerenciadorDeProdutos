@@ -3,10 +3,19 @@ package com.gerenciadorprodutos.model;
 import javafx.beans.property.*;
 
 /**
- * Entidade de dominio. Usa propriedades do JavaFX (em vez de campos simples)
- * porque a TableView da interface observa essas propriedades diretamente -
- * quando um valor muda, a celula da tabela se atualiza sozinha, sem precisar
- * recarregar a lista inteira.
+ * Entidade de domínio: representa um produto do estoque.
+ *
+ * Em vez de usar campos simples (int, String, double), esta classe usa
+ * "propriedades" do JavaFX (IntegerProperty, StringProperty etc). 
+ * Porque a TableView da interface observa essas propriedades diretamente: quando um valor muda 
+ * (por exemplo, a quantidade de um produto), 
+ * a célula da tabela se atualiza sozinha na tela, sem precisar recarregar a lista inteira manualmente.
+ *
+ * Cada campo segue sempre o mesmo padrão de 3 membros:
+ *  - um getX(), que devolve o valor "puro" (int, String, double...);
+ *  - um setX(valor), que altera o valor;
+ *  - um xProperty(), que devolve a propriedade JavaFX em si, usada pela tela
+ *    para "escutar" mudanças.
  */
 public class Produto {
 
@@ -16,9 +25,11 @@ public class Produto {
     private final DoubleProperty preco = new SimpleDoubleProperty();
     private final StringProperty categoria = new SimpleStringProperty();
 
+    /** Construtor vazio, usado quando os dados serão preenchidos depois. */
     public Produto() {
     }
 
+    /** Construtor de conveniência, usado ao criar um produto novo já com todos os dados em mãos. */
     public Produto(String nome, int quantidade, double preco, String categoria) {
         setNome(nome);
         setQuantidade(quantidade);
@@ -86,12 +97,12 @@ public class Produto {
         return categoria;
     }
 
-    /** Status sempre derivado da quantidade atual, nunca guardado "cru" no banco. */
+    /** Status do estoque (Normal, Baixo ou Esgotado). */
     public StatusEstoque getStatus() {
         return StatusEstoque.calcular(getQuantidade());
     }
 
-    /** Valor total investido/parado nesse item do estoque. */
+    /** Valor total investido/parado nesse item do estoque (quantidade x preço unitário). */
     public double getValorTotal() {
         return getQuantidade() * getPreco();
     }
